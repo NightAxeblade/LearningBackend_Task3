@@ -2,13 +2,15 @@ const fs = require('fs');
 const http = require('http');
 const nodemailer = require ('nodemailer');
 const server = http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.writeHead(200, {'Content-Type': 'text/html'}); 
+
+    var email = req.url.replace('/','');
     
-    fs.writeFile('EmailId.txt', req.url, function (err) {
+    fs.writeFile('EmailId.txt', email, function (err) {
         if (err) throw err;
         console.log('Saved!');
     });
-    res.end(req.url);
+    res.end(email);
 
 
     nodemailer.createTestAccount((err, account) => {
@@ -26,7 +28,7 @@ const server = http.createServer(function (req, res) {
         // setup email data with unicode symbols
         let mailOptions = {
             from: '"UD" <UD@example.com>', 
-            to: req.url, 
+            to: email, 
             subject: 'Hello ', 
             text: 'Heyy', // plain text body
             html: '<b>Hello world?</b>' // html body
